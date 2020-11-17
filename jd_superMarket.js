@@ -93,7 +93,7 @@ async function jdSuperMarket() {
   await smtgSign();//每日签到
   await smtgBeanSign()//
   await doDailyTask();//做日常任务，分享，关注店铺，
-  await help();//商圈助力
+  //await help();//商圈助力
   //await smtgQueryPkTask();//做商品PK任务
   await myProductList();//货架
   await drawLottery();
@@ -547,8 +547,8 @@ async function unlockProductByCategory(category) {
 //升级货架和商品
 async function upgrade() {
   superMarketUpgrade = $.getdata('jdSuperMarketUpgrade') ? $.getdata('jdSuperMarketUpgrade') : superMarketUpgrade;
-  if ($.isNode() && process.env.jdSuperMarketUpgrade) {
-    superMarketUpgrade = process.env.jdSuperMarketUpgrade;
+  if ($.isNode() && process.env.SUPERMARKET_UPGRADE) {
+    superMarketUpgrade = process.env.SUPERMARKET_UPGRADE;
   }
   if (`${superMarketUpgrade}` === 'false') {
     console.log(`\n自动升级: 您设置的是关闭自动升级\n`);
