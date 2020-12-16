@@ -121,7 +121,7 @@ async function jdHealth() {
     let i = 0, j = $.task.times
     while(j < $.task.maxTimes) {
       if (!acceptBody[i]) break
-      let res = await acceptTask(acceptBody[i++])
+      let res = await acceptTask(acceptBody[++i])
       if (res['success']) {
         await $.wait(10000)
         await doTask(doBody[i-1])
@@ -249,7 +249,6 @@ function reward() {
   })
 }
 function taskPostUrl(function_id, body = {}) {
-  $.log(`${function_id}`)
   return {
     url: `${JD_API_HOST}?functionId=${function_id}`,
     body: body,
