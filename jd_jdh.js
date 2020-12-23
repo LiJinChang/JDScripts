@@ -39,8 +39,8 @@ if ($.isNode()) {
   cookiesArr.reverse();
 }
 const JD_API_HOST = 'https://api.m.jd.com/api';
+$.newShareCodes = ['21d9b4b51a69839577027beb0aad5105', '8edbdfa148e78f028496cff17e7df35b'];
 !(async () => {
-  $.newShareCodes = [];
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/', {"open-url": "https://bean.m.jd.com/"});
     return;
@@ -72,7 +72,7 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
   await getAuthorShareCode('https://gitee.com/shylocks/updateTeam/raw/main/jd_jdh.json');
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
-      cookie = cookiesArr[i]
+      cookie = cookiesArr[i];
       //await helpFriends()
     }
   }
@@ -270,7 +270,7 @@ function doTask(taskType,taskId,infoId) {
         } else {
           if (safeGet(data)) {
             data = JSON.parse(data);
-            console.log(data.data.msg)
+            console.log(data.message)
             // await rewardTask(taskType,taskId,infoId)
           }
         }
@@ -293,7 +293,7 @@ function doTask2(taskType,taskId,infoId) {
         } else {
           if (safeGet(data)) {
             data = JSON.parse(data);
-            console.log(data.data.msg)
+            console.log(data.message)
             // await rewardTask(taskType,taskId,infoId)
           }
         }
