@@ -6,7 +6,7 @@ name: jd_crazy_joy_coin
 on:
   workflow_dispatch:
   schedule:
-    - cron: '* */4 * * *' 
+    - cron: '0 */4 * * *' 
   watch:
     types: started
 
