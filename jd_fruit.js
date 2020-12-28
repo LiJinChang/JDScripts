@@ -1,6 +1,6 @@
 /*
 东东水果:脚本更新地址 https://raw.githubusercontent.com/lxk0301/jd_scripts/master/jd_fruit.js
-更新时间：2020-11-17
+更新时间：2020-12-25
 东东农场活动链接：https://h5.m.jd.com/babelDiy/Zeus/3KSjXqQabiTuD1cJ28QskrpWoBKT/index.html
 已支持IOS双京东账号,Node.js支持N个京东账号
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
@@ -29,7 +29,7 @@ let cookiesArr = [], cookie = '', jdFruitShareArr = [], isBox = false, notify, n
 //下面给出两个账号的填写示例（iOS只支持2个京东账号）
 let shareCodes = [ // 这个列表填入你要助力的好友的shareCode
    //账号一的好友shareCode,不同好友的shareCode中间用@符号隔开
-  '0a74407df5df4fa99672a037eec61f7e@dbb21614667246fabcfd9685b6f448f3@6fbd26cc27ac44d6a7fed34092453f77@61ff5c624949454aa88561f2cd721bf6',
+  '0a74407df5df4fa99672a037eec61f7e@dbb21614667246fabcfd9685b6f448f3@6fbd26cc27ac44d6a7fed34092453f77@61ff5c624949454aa88561f2cd721bf6@56db8e7bc5874668ba7d5195230d067a',
   //账号二的好友shareCode,不同好友的shareCode中间用@符号隔开
   'b1638a774d054a05a30a17d3b4d364b8@f92cb56c6a1349f5a35f0372aa041ea0@9c52670d52ad4e1a812f894563c746ea@8175509d82504e96828afc8b1bbb9cb3',
 ]
@@ -37,7 +37,7 @@ let message = '', subTitle = '', option = {}, isFruitFinished = false;
 const retainWater = 100;//保留水滴大于多少g,默认100g;
 let jdNotify = false;//是否关闭通知，false打开通知推送，true关闭通知推送
 let jdFruitBeanCard = false;//农场使用水滴换豆卡(如果出现限时活动时100g水换20豆,此时比浇水划算,推荐换豆),true表示换豆(不浇水),false表示不换豆(继续浇水),脚本默认是浇水
-let randomCount = 20;
+let randomCount = $.isNode() ? 20 : 5;
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
 const urlSchema = `openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%20%22des%22:%20%22m%22,%20%22url%22:%20%22https://h5.m.jd.com/babelDiy/Zeus/3KSjXqQabiTuD1cJ28QskrpWoBKT/index.html%22%20%7D`;
 !(async () => {
@@ -60,8 +60,6 @@ const urlSchema = `openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%2
 
         if ($.isNode()) {
           await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
-        } else {
-          $.setdata('', `CookieJD${i ? i + 1 : "" }`);//cookie失效，故清空cookie。$.setdata('', `CookieJD${i ? i + 1 : "" }`);//cookie失效，故清空cookie。
         }
         continue
       }
@@ -85,7 +83,7 @@ async function jdFruit() {
     // option['media-url'] = $.farmInfo.farmUserPro.goodsImage;
     subTitle = `【京东账号${$.index}】${$.nickName}`;
     message = `【水果名称】${$.farmInfo.farmUserPro.name}\n`;
-    console.log(`\n【您的互助码shareCode】 ${$.farmInfo.farmUserPro.shareCode}\n`);
+    console.log(`\n【京东账号${$.index}（${$.nickName || $.UserName}）的${$.name}好友互助码】${$.farmInfo.farmUserPro.shareCode}\n`);
     console.log(`\n【已成功兑换水果】${$.farmInfo.farmUserPro.winTimes}次\n`);
     message += `【已兑换水果】${$.farmInfo.farmUserPro.winTimes}次\n`;
     //await masterHelpShare();//助力好友
@@ -281,7 +279,7 @@ async function doTenWater() {
     }
     if (isFruitFinished) {
       option['open-url'] = urlSchema;
-      $.msg($.name, `【提醒⏰】${$.farmInfo.farmUserPro.name}已可领取`, '请去京东APP或微信小程序查看\n点击弹窗即达', option);
+      $.msg($.name, ``, `【京东账号${$.index}】${$.nickName || $.UserName}\n【提醒⏰】${$.farmInfo.farmUserPro.name}已可领取\n请去京东APP或微信小程序查看\n点击弹窗即达`, option);
       $.done();
       if ($.isNode()) {
         await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName || $.UserName}水果已可领取`, `京东账号${$.index} ${$.nickName}\n${$.farmInfo.farmUserPro.name}已可领取`);
@@ -405,7 +403,7 @@ async function doTenWaterAgain() {
     }
     if (isFruitFinished) {
       option['open-url'] = urlSchema;
-      $.msg($.name, `【提醒⏰】${$.farmInfo.farmUserPro.name}已可领取`, '请去京东APP或微信小程序查看\n点击弹窗即达', option);
+      $.msg($.name, ``, `【京东账号${$.index}】${$.nickName || $.UserName}\n【提醒⏰】${$.farmInfo.farmUserPro.name}已可领取\n请去京东APP或微信小程序查看\n点击弹窗即达`, option);
       $.done();
       if ($.isNode()) {
         await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}水果已可领取`, `京东账号${$.index} ${$.nickName}\n${$.farmInfo.farmUserPro.name}已可领取`);
@@ -433,7 +431,7 @@ async function doTenWaterAgain() {
     }
     if (isFruitFinished) {
       option['open-url'] = urlSchema;
-      $.msg($.name, `【提醒⏰】${$.farmInfo.farmUserPro.name}已可领取`, '请去京东APP或微信小程序查看\n点击弹窗即达', option);
+      $.msg($.name, ``, `【京东账号${$.index}】${$.nickName || $.UserName}\n【提醒⏰】${$.farmInfo.farmUserPro.name}已可领取\n请去京东APP或微信小程序查看\n点击弹窗即达`, option);
       $.done();
       if ($.isNode()) {
         await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}水果已可领取`, `京东账号${$.index} ${$.nickName}\n${$.farmInfo.farmUserPro.name}已可领取`);
@@ -520,7 +518,7 @@ async function turntableFarm() {
         console.log('天天抽奖-不能自己给自己助力\n')
         continue
       }
-      await lotteryMasterHelp(code);
+      //await lotteryMasterHelp(code);
       // console.log('天天抽奖助力结果',lotteryMasterHelpRes.helpResult)
       if ($.lotteryMasterHelpRes.helpResult.code === '0') {
         console.log(`天天抽奖-助力${$.lotteryMasterHelpRes.helpResult.masterUserInfo.nickName}成功\n`)
@@ -725,6 +723,14 @@ async function clockInIn() {
         }
       }
     }
+    if ($.clockInInit.todaySigned && $.clockInInit.totalSigned === 7) {
+      console.log('开始领取--惊喜礼包38g水滴');
+      await gotClockInGift();
+      if ($.gotClockInGiftRes.code === '0') {
+        // message += `【惊喜礼包】获得${$.gotClockInGiftRes.amount}g💧\n`;
+        console.log(`【惊喜礼包】获得${$.gotClockInGiftRes.amount}g💧\n`);
+      }
+    }
     // 限时关注得水滴
     if ($.clockInInit.themes && $.clockInInit.themes.length > 0) {
       for (let item of $.clockInInit.themes) {
@@ -764,9 +770,17 @@ async function clockInIn() {
 }
 //
 async function getAwardInviteFriend() {
-  await friendListInitForFarm();
-  await receiveFriendInvite();
+  await friendListInitForFarm();//查询好友列表
   console.log(`\n今日已邀请好友${$.friendList.inviteFriendCount}个 / 每日邀请上限${$.friendList.inviteFriendMax}个`);
+  console.log(`开始删除${$.friendList.friends.length}个好友,可拿每天的邀请奖励`);
+  for (let friend of $.friendList.friends) {
+    console.log(`\n开始删除好友 [${friend.shareCode}]`);
+    const deleteFriendForFarm = await request('deleteFriendForFarm', { "shareCode": `${friend.shareCode}`,"version":8,"channel":1 });
+    if (deleteFriendForFarm && deleteFriendForFarm.code === '0') {
+      console.log(`删除好友 [${friend.shareCode}] 成功\n`);
+    }
+  }
+  await receiveFriendInvite();//为他人助力,接受邀请成为别人的好友
   if ($.friendList.inviteFriendCount > 0) {
     if ($.friendList.inviteFriendCount > $.friendList.inviteFriendGotAwardCount) {
       console.log('开始领取邀请好友的奖励');
@@ -865,9 +879,9 @@ async function receiveFriendInvite() {
     await inviteFriend(code);
     console.log(`接收邀请成为好友结果:${JSON.stringify($.inviteFriendRes.helpResult)}`)
     if ($.inviteFriendRes.helpResult.code === '0') {
-      console.log(`您已成为${$.inviteFriendRes.helpResult.masterUserInfo.nickName}的好友`)
+      console.log(`成功,您已成为${$.inviteFriendRes.helpResult.masterUserInfo.nickName}的好友`)
     } else if ($.inviteFriendRes.helpResult.code === '17') {
-      console.log(`对方已是您的好友`)
+      console.log(`失败,对方已是您的好友`)
     }
   }
   // console.log(`开始接受6fbd26cc27ac44d6a7fed34092453f77的邀请\n`)
@@ -966,6 +980,9 @@ async function gotStageAwardForFarm(type) {
 }
 //浇水API
 async function waterGoodForFarm() {
+  await $.wait(1000);
+  console.log('等待了1秒');
+
   const functionId = arguments.callee.name.toString();
   $.waterResult = await request(functionId);
 }
@@ -975,7 +992,7 @@ async function initForTurntableFarm() {
 }
 async function lotteryForTurntableFarm() {
   await $.wait(2000);
-  console.log('等待了5秒')
+  console.log('等待了2秒');
   $.lotteryRes = await request(arguments.callee.name.toString(), {type: 1, version: 4, channel: 1});
 }
 
@@ -1141,7 +1158,7 @@ async function initForFarm() {
         "sec-fetch-dest": "empty",
         "sec-fetch-mode": "cors",
         "sec-fetch-site": "same-site",
-        "user-agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1",
+        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : "jdapp;iPhone;9.2.2;14.2;%E4%BA%AC%E4%B8%9C/9.2.2 CFNetwork/1206 Darwin/20.1.0") : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.2.2;14.2;%E4%BA%AC%E4%B8%9C/9.2.2 CFNetwork/1206 Darwin/20.1.0"),
         "Content-Type": "application/x-www-form-urlencoded"
       }
     };
@@ -1214,7 +1231,7 @@ function timeFormat(time) {
   return date.getFullYear() + '-' + ((date.getMonth() + 1) >= 10 ? (date.getMonth() + 1) : '0' + (date.getMonth() + 1)) + '-' + (date.getDate() >= 10 ? date.getDate() : '0' + date.getDate());
 }
 function readShareCode() {
-  return new Promise(resolve => {
+  return new Promise(async resolve => {
     $.get({url: `http://api.turinglabs.net/api/v1/jd/farm/read/${randomCount}/`}, (err, resp, data) => {
       try {
         if (err) {
@@ -1232,6 +1249,8 @@ function readShareCode() {
         resolve(data);
       }
     })
+    await $.wait(10000);
+    resolve()
   })
 }
 function shareCodesFormat() {
@@ -1328,7 +1347,7 @@ function TotalBean() {
         "Connection": "keep-alive",
         "Cookie": cookie,
         "Referer": "https://wqs.jd.com/my/jingdou/my.shtml?sceneval=2",
-        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1"
+        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : "jdapp;iPhone;9.2.2;14.2;%E4%BA%AC%E4%B8%9C/9.2.2 CFNetwork/1206 Darwin/20.1.0") : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.2.2;14.2;%E4%BA%AC%E4%B8%9C/9.2.2 CFNetwork/1206 Darwin/20.1.0")
       }
     }
     $.post(options, (err, resp, data) => {
@@ -1396,7 +1415,7 @@ function taskUrl(function_id, body = {}) {
     url: `${JD_API_HOST}?functionId=${function_id}&appid=wh5&body=${escape(JSON.stringify(body))}`,
     headers: {
       Cookie: cookie,
-      UserAgent: `Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1`,
+      UserAgent: $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : "jdapp;iPhone;9.2.2;14.2;%E4%BA%AC%E4%B8%9C/9.2.2 CFNetwork/1206 Darwin/20.1.0") : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.2.2;14.2;%E4%BA%AC%E4%B8%9C/9.2.2 CFNetwork/1206 Darwin/20.1.0"),
     }
   }
 }
