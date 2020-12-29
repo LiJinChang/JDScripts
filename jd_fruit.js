@@ -518,7 +518,7 @@ async function turntableFarm() {
         console.log('天天抽奖-不能自己给自己助力\n')
         continue
       }
-      //await lotteryMasterHelp(code);
+      await lotteryMasterHelp(code);
       // console.log('天天抽奖助力结果',lotteryMasterHelpRes.helpResult)
       if ($.lotteryMasterHelpRes.helpResult.code === '0') {
         console.log(`天天抽奖-助力${$.lotteryMasterHelpRes.helpResult.masterUserInfo.nickName}成功\n`)
