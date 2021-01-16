@@ -2,7 +2,7 @@
 *
     Name: 京喜财富岛
     Address: 京喜App ====>>>> 全民赚大钱
-    Update: 2020/12/19 8:00
+    Update: 2021/1/8 9:30
     Thanks:
       whyour大佬
       TG: https://t.me/joinchat/O1WgnBbM18YjQQVFQ_D86w
@@ -39,11 +39,18 @@
 
     BoxJS订阅
     https://raw.githubusercontent.com/whyour/hundun/master/quanx/whyour.boxjs.json
+
+    Docker通知推送：
+    ################################## 京喜财富岛是否静默运行 ##################################
+    ## 默认为 "false"，静默，不发送推送通知消息，如想收到通知，请修改为 "true"
+    ## 如果你不想完全关闭或者完全开启通知，只想在特定的时间发送通知，可以参考上面面的“定义东东萌宠是否静默运行”部分，设定几个if判断条件
+    export CFD_NOTIFY_CONTROL=""
 *
 **/
 
 const $ = new Env("京喜财富岛");
 const JD_API_HOST = "https://m.jingxi.com/";
+const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
 $.tokens = [$.getdata('jxnc_token1') || '{}', $.getdata('jxnc_token2') || '{}'];
 $.showLog = $.getdata("cfd_showLog") ? $.getdata("cfd_showLog") === "true" : false;
@@ -59,10 +66,13 @@ $.info = {};
   if (!getCookies()) return;
   for (let i = 0; i < $.cookieArr.length; i++) {
     $.currentCookie = $.cookieArr[i];
-    $.currentToken = JSON.parse($.tokens[i]);
+    $.currentToken = JSON.parse($.tokens[i] || '{}');
     if ($.currentCookie) {
-      const userName = decodeURIComponent($.currentCookie.match(/pt_pin=(.+?);/) && $.currentCookie.match(/pt_pin=(.+?);/)[1]);
-      $.log(`\n开始【京东账号${i + 1}】${userName}`);
+      $.userName = decodeURIComponent($.currentCookie.match(/pt_pin=(.+?);/) && $.currentCookie.match(/pt_pin=(.+?);/)[1]);
+      $.index = i + 1;
+      $.nickName = '';
+      
+      $.log(`\n开始【京东账号${i + 1}】${$.userName}`);
 
       const beginInfo = await getUserInfo();
          
@@ -110,16 +120,16 @@ $.info = {};
       await $.wait(500);
       await submitGroupId();
       await $.wait(500);
-      //await joinGroup();
+      await joinGroup();
       //提交邀请码
       await $.wait(500);
-      //await submitInviteId(userName);
+      await submitInviteId($.userName);
       //超级助力
       await $.wait(500);
-      //await createSuperAssistUser();
+      await createSuperAssistUser();
       //普通助力
       await $.wait(500);
-      //await createAssistUser();
+      await createAssistUser();
     }
   }
   await $.wait(500);
@@ -852,7 +862,7 @@ function taskListUrl(function_path, body) {
 }
 
 function showMsg() {
-  return new Promise((resolve) => {
+  return new Promise(async (resolve) => {
     if ($.notifyTime) {
       const notifyTimes = $.notifyTime.split(",").map((x) => x.split(":"));
       const now = $.time("HH:mm").split(":");
@@ -864,6 +874,10 @@ function showMsg() {
     } else {
       $.msg($.name, "", `\n${$.result.join("\n")}`);
     }
+    
+    if ($.isNode() && process.env.CFD_NOTIFY_CONTROL)
+      await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}`, `账号${$.index}：${$.nickName || $.userName}\n${$.result.join("\n")}`);
+      
     resolve();
   });
 }
