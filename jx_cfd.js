@@ -120,16 +120,16 @@ $.info = {};
       await $.wait(500);
       await submitGroupId();
       await $.wait(500);
-      await joinGroup();
+      //await joinGroup();
       //提交邀请码
       await $.wait(500);
       await submitInviteId($.userName);
       //超级助力
       await $.wait(500);
-      await createSuperAssistUser();
+      //await createSuperAssistUser();
       //普通助力
       await $.wait(500);
-      await createAssistUser();
+      //await createAssistUser();
     }
   }
   await $.wait(500);
