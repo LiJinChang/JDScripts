@@ -6,7 +6,7 @@ name: jd_plantBean
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 8-22 * * *' #此处为UTC-0时间
+    - cron: '0 23,0-14/1 * * *' #此处为UTC-0时间
   watch:
     types: started
 
@@ -38,7 +38,6 @@ jobs:
         run: |
           node jd_plantBean.js
         env:
-          TZ: Asia/Shanghai
           JD_COOKIE: ${{ secrets.JD_COOKIE }}
           JD_USER_AGENT: ${{ secrets.JD_USER_AGENT }}
           JD_DEBUG: ${{ secrets.JD_DEBUG }}

@@ -6,7 +6,7 @@ name: jd_shop
 on:
   workflow_dispatch:
   schedule:
-    - cron: '58 23 * * *'
+    - cron: '58 15 * * *'
   watch:
     types: started
 
@@ -38,7 +38,6 @@ jobs:
         run: |
           node jd_shop.js
         env:
-          TZ: Asia/Shanghai
           JD_COOKIE: ${{ secrets.JD_COOKIE }}
           JD_USER_AGENT: ${{ secrets.JD_USER_AGENT }}
           JD_DEBUG: ${{ secrets.JD_DEBUG }}

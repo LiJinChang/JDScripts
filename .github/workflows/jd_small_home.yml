@@ -6,7 +6,7 @@ name: jd_small_home
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 8 * * * ' 
+    - cron: '16 0 * * * ' 
   watch:
     types: started
 
@@ -38,7 +38,6 @@ jobs:
         run: |
           node jd_small_home.js
         env:
-          TZ: Asia/Shanghai
           JD_COOKIE: ${{ secrets.JD_COOKIE }}
           JD_USER_AGENT: ${{ secrets.JD_USER_AGENT }}
           JD_DEBUG: ${{ secrets.JD_DEBUG }}
