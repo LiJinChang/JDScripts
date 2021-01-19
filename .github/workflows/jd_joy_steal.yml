@@ -6,11 +6,10 @@ name: jd_joy_steal
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 16,22 * * *'
+    - cron: '0 0,6 * * *'
   watch:
     types: started
-  repository_dispatch:
-    types: joy_steal
+
 jobs:
   build:
 
@@ -39,7 +38,9 @@ jobs:
         run: |
           node jd_joy_steal.js
         env:
+          TZ: Asia/Shanghai
           JD_COOKIE: ${{ secrets.JD_COOKIE }}
+          JD_USER_AGENT: ${{ secrets.JD_USER_AGENT }}
           JD_DEBUG: ${{ secrets.JD_DEBUG }}
           JOY_HELP_FEED: ${{ secrets.JOY_HELP_FEED }}
           PUSH_KEY: ${{ secrets.PUSH_KEY }}

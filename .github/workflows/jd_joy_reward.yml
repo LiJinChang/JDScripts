@@ -6,11 +6,10 @@ name: jd_joy_reward
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0,4,8,16 * * *'
+    - cron: '0 0,8,12,16 * * *'
   watch:
     types: started
-  repository_dispatch:
-    types: joy_reward
+
 jobs:
   build:
 
@@ -39,7 +38,9 @@ jobs:
         run: |
           node jd_joy_reward.js
         env:
+          TZ: Asia/Shanghai
           JD_COOKIE: ${{ secrets.JD_COOKIE }}
+          JD_USER_AGENT: ${{ secrets.JD_USER_AGENT }}
           JD_DEBUG: ${{ secrets.JD_DEBUG }}
           JD_JOY_REWARD_NOTIFY: ${{ secrets.JD_JOY_REWARD_NOTIFY }}
           JD_JOY_REWARD_NAME: ${{ secrets.JD_JOY_REWARD_NAME }}

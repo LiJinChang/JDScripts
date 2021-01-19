@@ -6,11 +6,10 @@ name: jd_necklace
 on:
   workflow_dispatch:
   schedule:
-    - cron: '10 12,16 * * *' 
+    - cron: '10 0,20 * * *' 
   watch:
     types: started
-  repository_dispatch:
-    types: pantBean
+
 jobs:
   build:
 
@@ -39,7 +38,9 @@ jobs:
         run: |
           node jd_necklace.js
         env:
+          TZ: Asia/Shanghai
           JD_COOKIE: ${{ secrets.JD_COOKIE }}
+          JD_USER_AGENT: ${{ secrets.JD_USER_AGENT }}
           JD_DEBUG: ${{ secrets.JD_DEBUG }}
           PUSH_KEY: ${{ secrets.PUSH_KEY }}
           BARK_PUSH: ${{ secrets.BARK_PUSH }}

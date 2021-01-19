@@ -6,11 +6,10 @@ name: jd_lotteryMachine
 on:
   workflow_dispatch:
   schedule:
-    - cron: '11 17 * * *'
+    - cron: '11 1 * * *'
   watch:
     types: started
-  repository_dispatch:
-    types: jd_lotteryMachine
+
 jobs:
   build:
 
@@ -39,7 +38,9 @@ jobs:
         run: |
           node jd_lotteryMachine.js
         env:
+          TZ: Asia/Shanghai
           JD_COOKIE: ${{ secrets.JD_COOKIE }}
+          JD_USER_AGENT: ${{ secrets.JD_USER_AGENT }}
           JD_DEBUG: ${{ secrets.JD_DEBUG }}
           PUSH_KEY: ${{ secrets.PUSH_KEY }}
           BARK_PUSH: ${{ secrets.BARK_PUSH }}

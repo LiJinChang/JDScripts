@@ -6,11 +6,10 @@ name: jd_redPacket
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 17 * * *'
+    - cron: '0 1 * * *'
   watch:
     types: started
-  repository_dispatch:
-    types: redPacket
+
 jobs:
   build:
 
@@ -39,7 +38,9 @@ jobs:
         run: |
           node jd_redPacket.js
         env:
+          TZ: Asia/Shanghai
           JD_COOKIE: ${{ secrets.JD_COOKIE }}
+          JD_USER_AGENT: ${{ secrets.JD_USER_AGENT }}
           JD_DEBUG: ${{ secrets.JD_DEBUG }}
           PUSH_KEY: ${{ secrets.PUSH_KEY }}
           BARK_PUSH: ${{ secrets.BARK_PUSH }}

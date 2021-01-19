@@ -6,11 +6,10 @@ name: jd_blueCoin
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 16 * * *'
+    - cron: '0 0 * * *'
   watch:
     types: started
-  repository_dispatch:
-    types: blueCoin
+
 jobs:
   build:
 
@@ -39,7 +38,9 @@ jobs:
         run: |
           node jd_blueCoin.js
         env:
+          TZ: Asia/Shanghai
           JD_COOKIE: ${{ secrets.JD_COOKIE }}
+          JD_USER_AGENT: ${{ secrets.JD_USER_AGENT }}
           JD_DEBUG: ${{ secrets.JD_DEBUG }}
           MARKET_COIN_TO_BEANS: ${{ secrets.MARKET_COIN_TO_BEANS }}
           MARKET_REWARD_NOTIFY: ${{ secrets.MARKET_REWARD_NOTIFY }}
