@@ -11,12 +11,12 @@ Combine from Zero-S1/JD_tools(https://github.com/Zero-S1/JD_tools)
 // quantumultx
 // [task_local]
 // #京东宠汪汪
-// 15 */2 * * * https://raw.githubusercontent.com/lxk0301/jd_scripts/master/jd_joy.js, tag=京东宠汪汪, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jdcww.png, enabled=true
+// 15 */2 * * * https://raw.githubusercontent.com/LXK9301/jd_scripts/master/jd_joy.js, tag=京东宠汪汪, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jdcww.png, enabled=true
 // Loon
 // [Script]
-// cron "15 */2 * * *" script-path=https://raw.githubusercontent.com/lxk0301/jd_scripts/master/jd_joy.js,tag=京东宠汪汪
+// cron "15 */2 * * *" script-path=https://raw.githubusercontent.com/LXK9301/jd_scripts/master/jd_joy.js,tag=京东宠汪汪
 // Surge
-// 京东宠汪汪 = type=cron,cronexp="15 */2 * * *",wake-system=1,timeout=20,script-path=https://raw.githubusercontent.com/lxk0301/jd_scripts/master/jd_joy.js
+// 京东宠汪汪 = type=cron,cronexp="15 */2 * * *",wake-system=1,timeout=20,script-path=https://raw.githubusercontent.com/LXK9301/jd_scripts/master/jd_joy.js
 const $ = new Env('宠汪汪');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
@@ -49,7 +49,7 @@ const JD_API_HOST = 'https://jdjoy.jd.com/pet'
 const weAppUrl = 'https://draw.jdfcloud.com//pet';
 !(async () => {
   if (!cookiesArr[0]) {
-    $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/', {"open-url": "https://bean.m.jd.com/"});
+    $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
   for (let i = 0; i < cookiesArr.length; i++) {
@@ -62,7 +62,7 @@ const weAppUrl = 'https://draw.jdfcloud.com//pet';
       await TotalBean();
       console.log(`\n开始【京东账号${$.index}】${$.nickName || $.UserName}\n`);
       if (!$.isLogin) {
-        $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/`, {"open-url": "https://bean.m.jd.com/"});
+        $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
 
         if ($.isNode()) {
           await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
@@ -121,7 +121,7 @@ async function deskGoodsTask() {
        }
      }
    } else {
-     console.log(`限时商品货架已下架`);
+     console.log(`\n限时商品货架已下架`);
    }
  }
 }
@@ -220,13 +220,50 @@ async function petTask() {
     //每日签到
     if (item['taskType'] === 'SignEveryDay') {
       if (item['receiveStatus'] === 'chance_left') {
-        console.log('未完成,需要自己手动去微信小程序【来客有礼】签到，可获得京豆奖励')
+        console.log('每日签到未完成,需要自己手动去微信小程序【来客有礼】签到，可获得京豆奖励')
       } else if (item['receiveStatus'] === 'unreceive') {
         //已签到，领取签到后的狗粮
         const res = await getFood('SignEveryDay');
         console.log(`领取每日签到狗粮结果：${res.data}`);
       }
     }
+    //每日赛跑
+    if (item['taskType'] === 'race') {
+      if (item['receiveStatus'] === 'chance_left') {
+        console.log('每日赛跑未完成')
+      } else if (item['receiveStatus'] === 'unreceive') {
+        const res = await getFood('race');
+        console.log(`领取每日赛跑狗粮结果：${res.data}`);
+      }
+    }
+    //每日兑换
+    if (item['taskType'] === 'exchange') {
+      if (item['receiveStatus'] === 'chance_left') {
+        console.log('每日兑换未完成')
+      } else if (item['receiveStatus'] === 'unreceive') {
+        const res = await getFood('exchange');
+        console.log(`领取每日兑换狗粮结果：${res.data}`);
+      }
+    }
+    //每日帮好友喂一次狗粮
+    if (item['taskType'] === 'HelpFeed') {
+      if (item['receiveStatus'] === 'chance_left') {
+        console.log('每日帮好友喂一次狗粮未完成')
+      } else if (item['receiveStatus'] === 'unreceive') {
+        const res = await getFood('HelpFeed');
+        console.log(`领取每日帮好友喂一次狗粮 狗粮结果：${res.data}`);
+      }
+    }
+    //每日喂狗粮
+    if (item['taskType'] === 'FeedEveryDay') {
+      if (item['taskStatus'] === 'processing') {
+        console.log(`\n${item['taskName']}任务进行中\n`)
+      } else if (item['receiveStatus'] === 'unreceive') {
+        const res = await getFood('FeedEveryDay');
+        console.log(`领取每日帮好友喂一次狗粮 狗粮结果：${res.data}`);
+      }
+    }
+    //
     //邀请用户助力,领狗粮.(需手动去做任务)
     if (item['taskType'] === 'InviteUser') {
       if (item['receiveStatus'] === 'chance_left') {
@@ -475,16 +512,16 @@ function followShop(shopId) {
 }
 function enterRoom() {
   return new Promise(resolve => {
-    const url = `${weAppUrl}/enterRoom?reqSource=weapp`;
+    const url = `${weAppUrl}/enterRoom/h5?reqSource=weapp&invitePin=&openId=`;
     const host = `draw.jdfcloud.com`;
     const reqSource = 'weapp';
-    $.get(taskUrl(url, host, reqSource), (err, resp, data) => {
+    $.post({...taskUrl(url, host, reqSource),body:'{}'}, (err, resp, data) => {
       try {
         if (err) {
           console.log('\n京东宠汪汪: API查询请求失败 ‼️‼️')
         } else {
           // console.log('JSON.parse(data)', JSON.parse(data))
-         
+
           $.roomData = JSON.parse(data);
 
           console.log(`现有狗粮: ${$.roomData.data.petFood}\n`)
@@ -800,7 +837,7 @@ function TotalBean() {
         "Connection": "keep-alive",
         "Cookie": cookie,
         "Referer": "https://wqs.jd.com/my/jingdou/my.shtml?sceneval=2",
-        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : "jdapp;iPhone;9.2.2;14.2;%E4%BA%AC%E4%B8%9C/9.2.2 CFNetwork/1206 Darwin/20.1.0") : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.2.2;14.2;%E4%BA%AC%E4%B8%9C/9.2.2 CFNetwork/1206 Darwin/20.1.0")
+        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.2.2;14.2;%E4%BA%AC%E4%B8%9C/9.2.2 CFNetwork/1206 Darwin/20.1.0")
       }
     }
     $.post(options, (err, resp, data) => {
@@ -838,7 +875,7 @@ function taskUrl(url, Host, reqSource) {
       'Connection': 'keep-alive',
       'Content-Type': 'application/json',
       'Referer': 'https://jdjoy.jd.com/pet/index',
-      'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : "jdapp;iPhone;9.2.2;14.2;%E4%BA%AC%E4%B8%9C/9.2.2 CFNetwork/1206 Darwin/20.1.0") : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.2.2;14.2;%E4%BA%AC%E4%B8%9C/9.2.2 CFNetwork/1206 Darwin/20.1.0"),
+      'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.2.2;14.2;%E4%BA%AC%E4%B8%9C/9.2.2 CFNetwork/1206 Darwin/20.1.0"),
       'Accept-Language': 'zh-cn',
       'Accept-Encoding': 'gzip, deflate, br',
     }
@@ -850,7 +887,7 @@ function taskPostUrl(url, body, reqSource, Host, ContentType) {
     body: body,
     headers: {
       'Cookie': cookie,
-      'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : "jdapp;iPhone;9.2.2;14.2;%E4%BA%AC%E4%B8%9C/9.2.2 CFNetwork/1206 Darwin/20.1.0") : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.2.2;14.2;%E4%BA%AC%E4%B8%9C/9.2.2 CFNetwork/1206 Darwin/20.1.0"),
+      'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.2.2;14.2;%E4%BA%AC%E4%B8%9C/9.2.2 CFNetwork/1206 Darwin/20.1.0"),
       'reqSource': reqSource,
       'Content-Type': ContentType,
       'Host': Host,
