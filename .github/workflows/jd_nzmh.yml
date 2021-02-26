@@ -6,7 +6,7 @@ name: jd_nzmh
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 19 19-25 2 *'
+    - cron: '10 22 * * *'
   watch:
     types: started
 
