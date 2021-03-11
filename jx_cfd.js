@@ -108,7 +108,7 @@ $.info = {};
 
       //领取寻宝宝箱
       await $.wait(500);
-      await openPeriodBox();
+      //await openPeriodBox();
 
       const endInfo = await getUserInfo();
       $.result.push(
@@ -118,12 +118,12 @@ $.info = {};
 
       //出岛寻宝大作战
       await $.wait(500);
-      await submitGroupId();
+      //await submitGroupId();
       await $.wait(500);
       //await joinGroup();
       //提交邀请码
       await $.wait(500);
-      await submitInviteId($.userName);
+      //await submitInviteId($.userName);
       //超级助力
       await $.wait(500);
       //await createSuperAssistUser();
